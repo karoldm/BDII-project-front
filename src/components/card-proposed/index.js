@@ -1,7 +1,7 @@
 import React from "react";
 import { ContainerColumn, ListCardContainer } from "./styles";
 
-const ListCard = (props) => {
+const ProposedCard = (props) => {
     return (
         <ListCardContainer>
             <img
@@ -16,4 +16,4 @@ const ListCard = (props) => {
         </ListCardContainer>
     );
 };
-export default ListCard;
+export default ProposedCard;

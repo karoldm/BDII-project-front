@@ -6,9 +6,10 @@ const DescriptionInput = (props) => {
         <Container>
             <Title>{props.title}</Title>
             <TextInput
+                value={props.value}
                 placeholder={props.placeholder}
                 rows={7}
-                onChange= {props.onChange}
+                onChange={props.onChange}
             />
         </Container>
     )

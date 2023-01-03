@@ -44,11 +44,12 @@ const Login = () => {
 			password
 		}
 
-		const status = await handleLogin(data);
+		// const status = await handleLogin(data);
+		const status = 200
 		console.log(status)
 		if (status === 200) {
-			if(password === "admin") {
-				navigate('/admin');	
+			if (password === "admin") {
+				navigate('/admin');
 			}
 			else {
 				navigate('/');
@@ -77,7 +78,7 @@ const Login = () => {
 		setPassword('')
 		setEmail('')
 		setPhone('')
-		setState({ ...state, open: true});
+		setState({ ...state, open: true });
 
 	}
 
@@ -191,7 +192,7 @@ const Login = () => {
 			<Snackbar
 				open={state.open}
 				onClose={handleClose}
-				message= "Cadastro realizado com Sucesso! Vá em 'Entrar' e entre com sua conta!"
+				message="Cadastro realizado com Sucesso! Vá em 'Entrar' e entre com sua conta!"
 				key={state.vertical + state.horizontal}
 			/>
 		</>

@@ -11,29 +11,9 @@ export const Form = styled.form`
 	padding-top: 3vh;
 `;
 
-export const ContainerInputs = styled.div`
-	display: flex;
-	width: 57%;
-	align-items: center;
-	justify-content: space-between;
-
-	select{
-		width: 70%;
-		height: 55%;
-		border-radius: 8px;
-		margin-right: 10px;
-		outline: 0.25vh solid lightgray;
-		border: none;
-	}
-
-	button {
-		width: 10%;
-	}
-`;
-
-export const GestorListCard = styled.div`
-	display: flex;
-	width: 24%;
+export const PropostaCardList = styled.div`
+display: flex;
+	width: 40%;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
@@ -54,19 +34,15 @@ export const GestorListCard = styled.div`
 		width: 100%;
 		gap: 2rem;
 	}
-
-	img {
-		width: 5rem;
-	}
+	
 `;
 
-export const ContainerGestorList = styled.div`
-	display: flex;
+export const ContainerPropostaList = styled.div`
+display: flex;
 	width: 100%;
 	align-items: flex-start;
 	justify-content: space-around;
-	flex-wrap: wrap;
-`;
+	flex-wrap: wrap;`;
 
 export const BoxModal = styled.div`
 	display: flex;

@@ -130,8 +130,8 @@ const AdminProposedLegislation = () => {
 					<AdminServiceDescription description="Aqui está a lista de todos os gestores cadastrados até o momento." />
 					<ContainerPropostaList>
 						{
-							propostas.map((proposta) => (
-								<PropostaCardList>
+							propostas.map((proposta, index) => (
+								<PropostaCardList key={index}>
 									<span><b>Titulo: </b>{proposta.titulo}</span>
 									<p><b>Nome do gestor: </b>{proposta.nameGestor}</p>
 									<p><b>descricao: </b>{proposta.description}</p>

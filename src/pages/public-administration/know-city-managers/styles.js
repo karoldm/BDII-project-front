@@ -74,3 +74,97 @@ export const Details = styled.div`
 		border-radius: 30px;
 	}
 `;
+
+export const ContainerInputs = styled.div`
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-around;
+	margin-bottom: 2rem;
+
+	select{
+		width: 50%;
+		height: 1.5rem;
+		border-radius: 8px;
+		margin-right: 10px;
+		outline: 0.25vh solid lightgray;
+		border: none;
+	}
+
+	button {
+		width: 15%;
+	}
+`;
+
+export const ContainerColumnCard = styled.div`
+	display: flex;
+	flex-direction: column;	
+	overflow-y: auto;
+	width: 100%;
+
+	h2 { 
+		margin-top: 7vh;
+		color: #133d59;
+		text-align: left; 
+	}
+
+	h3 {
+		color: #133d59;
+		text-align: left;
+		margin-top: -1.9vh;
+	}
+
+	h4 {
+		margin-bottom: 10vh;
+		color: #1b262c;
+		text-align: justify;
+		font-size: 14px;
+		font-weight: normal;
+		margin-top: -1.5vh;
+		margin-right: 2vw;
+	}
+
+	::-webkit-scrollbar {
+		width: 12px; 
+	}
+	::-webkit-scrollbar-track {
+		background: lightgray;
+		border-radius: 30px;
+	}
+	::-webkit-scrollbar-thumb {
+		background: gray;
+		border-radius: 30px;
+	}
+
+	div {
+		display: flex;
+	}
+`;
+
+export const ListCardContainer = styled.div`
+	display: flex;
+	flex-direction: row;
+	height: 35vh;
+	width: 90%;
+	border: 0.3vh solid lightgray;
+	border-radius: 10px;
+	margin-top: 1vh;
+	margin-bottom: 4vh;
+	padding-left: 2rem;
+
+	img {
+		align-self: center;
+		height: 24vh;
+		width: auto;
+		opacity: 1;
+		margin-right: 2vw;
+	}
+`;
+
+export const ContainerGestorList = styled.div`
+	display: flex;
+	width: 100%;
+	align-items: flex-start;
+	justify-content: space-around;
+	flex-wrap: wrap;
+`;

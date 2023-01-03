@@ -95,8 +95,8 @@ const AdminAntiCorruptionCenter = () => {
 					<div></div>
 					<ContainerDenunciaList>
 						{
-							denuncias.map((denuncia) => (
-								<DenunciaCardList>
+							denuncias.map((denuncia, index) => (
+								<DenunciaCardList key={index}>
 									<span><b>Contra: </b>{denuncia.gestor.name}</span>
 									<p><b>Realizada por: </b>{denuncia.cidadao.name}</p>
 									<p><b>Data: </b>{denuncia.data}</p>

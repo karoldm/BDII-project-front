@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../components/header";
 import MiniCard from "../../../components/mini-card";
-import ListCard from "../../../components/card-list";
 import Footer from "../../../components/footer";
 import Favorites from "../../../components/favorites";
 import Typography from "@mui/material/Typography";
@@ -15,15 +14,104 @@ import {
 import { AiOutlineStar } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
 import { StyledHr } from "../../../components/styled-components/StyledHr";
+import { ContainerInputs, ContainerGestorList, ListCardContainer, ContainerColumnCard } from './styles';
+import { ca } from "date-fns/locale";
+import Button from "../../../components/styled-components/form-button";
+
+
+const cargos = [
+	{ titulo: 'cargo 01' },
+	{ titulo: 'cargo 01' },
+	{ titulo: 'cargo 02' },
+	{ titulo: 'cargo 01' }
+];
+
+const gestoresTeste = [
+	{
+		name: 'nome do gestor',
+		cargo: 'cargo 01',
+		dataPosse: '2023-01-01',
+		dataNascimento: '1990-01-01',
+		partido: 'Partido 01 - 01',
+		photo: '/assets/img/profilepic.png',
+	},
+	{
+		name: 'nome do gestor',
+		cargo: 'cargo 01',
+		dataPosse: '2023-01-01',
+		dataNascimento: '1990-01-01',
+		partido: 'Partido 01 - 01',
+		photo: '/assets/img/profilepic.png',
+	},
+	{
+		name: 'nome do gestor',
+		cargo: 'cargo 01',
+		dataPosse: '2023-01-01',
+		dataNascimento: '1990-01-01',
+		partido: 'Partido 01 - 01',
+		photo: '/assets/img/profilepic.png',
+	},
+	{
+		name: 'nome do gestor',
+		cargo: 'cargo 01',
+		dataPosse: '2023-01-01',
+		dataNascimento: '1990-01-01',
+		partido: 'Partido 01 - 01',
+		photo: '/assets/img/profilepic.png',
+	},
+	{
+		name: 'nome do gestor',
+		cargo: 'cargo 01',
+		dataPosse: '2023-01-01',
+		dataNascimento: '1990-01-01',
+		partido: 'Partido 01 - 01',
+		photo: '/assets/img/profilepic.png',
+	},
+	{
+		name: 'nome do gestor',
+		cargo: 'cargo 02',
+		dataPosse: '2023-01-01',
+		dataNascimento: '1990-01-01',
+		partido: 'Partido 01 - 01',
+		photo: '/assets/img/profilepic.png',
+	},
+	{
+		name: 'nome do gestor',
+		cargo: 'cargo 02',
+		dataPosse: '2023-01-01',
+		dataNascimento: '1990-01-01',
+		partido: 'Partido 01 - 01',
+		photo: '/assets/img/profilepic.png',
+	},
+	{
+		name: 'nome do gestor',
+		cargo: 'cargo 01',
+		dataPosse: '2023-01-01',
+		dataNascimento: '1990-01-01',
+		partido: 'Partido 01 - 01',
+		photo: '/assets/img/profilepic.png',
+	},
+	{
+		name: 'nome do gestor',
+		cargo: 'cargo 01',
+		dataPosse: '2023-01-01',
+		dataNascimento: '1990-01-01',
+		partido: 'Partido 01 - 01',
+		photo: '/assets/img/profilepic.png',
+	},
+];
 
 const Gestores = (props) => {
 	const [gestores, setGestores] = useState([]);
 	const [isFavorite, setIsFavorite] = useState(false);
+
 	useEffect(() => {
+		setGestores(gestoresTeste);
 		props.data.find(
 			(favoriteX) => favoriteX.id === 46 && setIsFavorite(true)
 		);
 	}, []);
+
 	const handleFavorite = () => {
 		if (!isFavorite) {
 			props.handleAddFavorite({
@@ -42,6 +130,13 @@ const Gestores = (props) => {
 		}
 		setIsFavorite(!isFavorite);
 	};
+
+	const handleFilter = (cargoFilter) => {
+		setGestores(gestoresTeste)
+		const gestoresFiltered = gestoresTeste.filter((gestor) => gestor.cargo === cargoFilter);
+		setGestores(gestoresFiltered);
+	}
+
 	return (
 		<ContainerBase>
 			<Header />
@@ -109,54 +204,36 @@ const Gestores = (props) => {
 					<StyledHr />
 				</TopContentContainer>
 				<MidContentContainer>
-					<ListCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Nome e Sobrenome"
-						sobrenome="Cargo"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ListCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Nome e Sobrenome"
-						sobrenome="Cargo"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ListCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Nome e Sobrenome"
-						sobrenome="Cargo"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ListCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Nome e Sobrenome"
-						sobrenome="Cargo"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ListCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Nome e Sobrenome"
-						sobrenome="Cargo"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ListCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Nome e Sobrenome"
-						sobrenome="Cargo"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ListCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Nome e Sobrenome"
-						sobrenome="Cargo"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ListCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Nome e Sobrenome"
-						sobrenome="Cargo"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
+					<ContainerInputs>
+						<b>Filtrar gestor por cargo</b>
+						<select name="cargoList" onChange={(e) => handleFilter(e.target.value)} >
+							{cargos.map((cargo) => {
+								return <option value={cargo.titulo}>{cargo.titulo} </option>
+							})}
+						</select>
+						<Button type='button' text='Todos' onClick={() => setGestores(gestoresTeste)} />
+					</ContainerInputs>
+					<ContainerGestorList>
+						{
+							gestores.map((gestor, index) => (
+								<ListCardContainer key={index}>
+									<img
+										src={gestor.photo}
+										alt={gestor.name}
+									/>
+									<ContainerColumnCard>
+										<h2> {gestor.name} </h2>
+										<h3> {gestor.cargo} </h3>
+										<h3> {gestor.partido} </h3>
+										<div>
+											<h4>Data de Posse: {gestor.dataPosse} </h4>
+											<h4>Data de Nascimento: {gestor.dataNascimento} </h4>
+										</div>
+									</ContainerColumnCard>
+								</ListCardContainer>
+							))
+						}
+					</ContainerGestorList>
 				</MidContentContainer>
 			</ContentContainer>
 			<Footer />

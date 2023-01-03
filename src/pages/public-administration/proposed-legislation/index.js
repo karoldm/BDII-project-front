@@ -16,13 +16,37 @@ import { StyledHr } from "../../../components/styled-components/StyledHr";
 import Footer from "../../../components/footer";
 import Favorites from "../../../components/favorites";
 
+import { ContainerPropostaList, ContainerInputs } from './styles';
+import Button from "../../../components/styled-components/form-button";
+import Input from "../../../components/input";
+
+
+const propostasTeste = [
+	{
+		nameGestor: 'nome do gestor',
+		titulo: 'titulo da proposta',
+		description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+		dataAprovacao: '2023-01-01'
+	},
+	{
+		nameGestor: 'nome do gestor 02',
+		titulo: 'titulo da proposta',
+		description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+		dataAprovacao: '2023-01-01'
+	}
+];
+
 const ProposedLegislation = (props) => {
 	const [isFavorite, setIsFavorite] = useState(false);
+	const [propostas, setPropostas] = useState([]);
+
 	useEffect(() => {
+		setPropostas(propostasTeste)
 		props.data.find(
 			(favoriteX) => favoriteX.id === 47 && setIsFavorite(true)
 		);
 	}, []);
+
 	const handleFavorite = () => {
 		if (!isFavorite) {
 			props.handleAddFavorite({
@@ -41,6 +65,12 @@ const ProposedLegislation = (props) => {
 		}
 		setIsFavorite(!isFavorite);
 	};
+
+	const handleFilter = (gestorFilter) => {
+		setPropostas(propostasTeste);
+		const propostasFiltered = propostasTeste.filter((proposta) => proposta.nameGestor.includes(gestorFilter));
+		setPropostas(propostasFiltered);
+	}
 
 	return (
 		<ContainerBase>
@@ -109,54 +139,24 @@ const ProposedLegislation = (props) => {
 					<StyledHr />
 				</TopContentContainer>
 				<MidContentContainer>
-					<ProposedCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Titulo da Proposta"
-						sobrenome="Gestor Responsável"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ProposedCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Titulo da Proposta"
-						sobrenome="Gestor Responsável"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ProposedCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Titulo da Proposta"
-						sobrenome="Gestor Responsável"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ProposedCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Titulo da Proposta"
-						sobrenome="Gestor Responsável"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ProposedCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Titulo da Proposta"
-						sobrenome="Gestor Responsável"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ProposedCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Titulo da Proposta"
-						sobrenome="Gestor Responsável"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ProposedCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Titulo da Proposta"
-						sobrenome="Gestor Responsável"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
-					<ProposedCard
-						source="/assets/img/home_administracao_publica.png"
-						nome="Titulo da Proposta"
-						sobrenome="Gestor Responsável"
-						descricao="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In laoreet ipsum dolor. Vivamus imperdiet semper odio sed consequat. Praesent cursus dui a porta blandit. Aliquam erat volutpat. Morbi quis ex sapien. Aliquam efficitur lorem mattis, vehicula justo sed, porta mi. Nulla at pulvinar ligula, eu dapibus felis. Cras vel orci eu dolor hendrerit dictum aliquet sed orci. Aliquam ultricies dignissim diam ut ornare."
-					/>
+					<ContainerInputs>
+						<b>Filtrar propostas por gestor</b>
+						<Input title="" onChange={(e) => handleFilter(e.target.value)} />
+						<Button type='button' text='Todos' onClick={() => setPropostas(propostasTeste)} />
+					</ContainerInputs>
+					<ContainerPropostaList>
+						{
+							propostas.map((proposta, index) => (
+								<ProposedCard
+									key={index}
+									source='/assets/img/home_conheca_os_gestores.png'
+									nome={proposta.titulo}
+									sobrenome={proposta.nameGestor}
+									descricao={proposta.description}
+								/>
+							))
+						}
+					</ContainerPropostaList>
 				</MidContentContainer>
 			</ContentContainer>
 			<Footer />

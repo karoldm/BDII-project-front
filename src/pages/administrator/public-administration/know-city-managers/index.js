@@ -18,8 +18,6 @@ import {
 import Typography from "@mui/material/Typography";
 import { Delete, Edit, NewReleases } from "@mui/icons-material";
 import { Modal } from "@mui/material";
-import { Box } from "@mui/system";
-import { set } from "date-fns";
 
 const partidos = [
 	{ name: 'Partido 01', sigla: '01' },
@@ -313,8 +311,8 @@ const AdminGestores = () => {
 					<AdminServiceDescription description="Aqui está a lista de todos os gestores cadastrados até o momento." />
 					<ContainerGestorList>
 						{
-							gestores.map((gestor) => (
-								<GestorListCard>
+							gestores.map((gestor, index) => (
+								<GestorListCard key={index}>
 									<img src={gestor.photo} />
 									<span><b>Nome Completo: </b>{gestor.name}</span>
 									<p><b>Cargo: </b>{gestor.cargo}</p>

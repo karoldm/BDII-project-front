@@ -27,10 +27,10 @@ display: flex;
 `;
 
 export const ContainerDenunciaList = styled.div`
-display: flex;
+    display: flex;
 	width: 100%;
 	align-items: flex-start;
 	justify-content: space-around;
 	flex-wrap: wrap;
-    `;
+`;
 

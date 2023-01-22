@@ -54,7 +54,7 @@ export const ContainerColumn = styled.div`
 `;
 
 export const InputField = styled.input`
-	height: 5.25vh;
+	height: 3.25vh;
 	width: 80%;
 	border: none;
 	outline: 0.25vh solid lightgray;
@@ -125,4 +125,14 @@ export const Form = styled.form`
 	flex-direction: column; 
 	align-items: center; 
 	justify-content: space-between;
+`;
+
+export const ContainerInputs = styled.div`
+	width: 100%;
+	display: flex;
+	gap: 10px;
+
+	input[type=date]{
+		width: 100%;
+	}
 `;

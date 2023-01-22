@@ -20,28 +20,41 @@ import { ContainerPropostaList, ContainerInputs } from './styles';
 import Button from "../../../components/styled-components/form-button";
 import Input from "../../../components/input";
 
+import {api} from '../../../services/api';
 
-const propostasTeste = [
-	{
-		nameGestor: 'nome do gestor',
-		titulo: 'titulo da proposta',
-		description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-		dataAprovacao: '2023-01-01'
-	},
-	{
-		nameGestor: 'nome do gestor 02',
-		titulo: 'titulo da proposta',
-		description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-		dataAprovacao: '2023-01-01'
-	}
-];
 
 const ProposedLegislation = (props) => {
 	const [isFavorite, setIsFavorite] = useState(false);
 	const [propostas, setPropostas] = useState([]);
+	const [propostasView, setPropostasView] = useState([]);
+
+	const getPropostas = async () => {
+		let propostasArray = [];
+
+		try {
+
+			const responseGestores = await api.get('/gestor');
+			const dataGestores = responseGestores.data;
+			let gestoresMap = {};
+			dataGestores.forEach(d => {
+				gestoresMap[d.numero] = d.nome_completo;
+			});
+
+			const responsePropostas = await api.get('/propostas');
+			const dataPropostas = responsePropostas.data;
+			dataPropostas.map(d => {
+					const p = {nome_gestor: gestoresMap[d.numero_gestor], ...d};
+					propostasArray.push(p);
+			});
+			setPropostas(propostasArray);	
+			setPropostasView(propostasArray);
+		} catch(error){
+			console.log(error);
+		}
+	} 
 
 	useEffect(() => {
-		setPropostas(propostasTeste)
+		getPropostas();
 		props.data.find(
 			(favoriteX) => favoriteX.id === 47 && setIsFavorite(true)
 		);
@@ -67,9 +80,9 @@ const ProposedLegislation = (props) => {
 	};
 
 	const handleFilter = (gestorFilter) => {
-		setPropostas(propostasTeste);
-		const propostasFiltered = propostasTeste.filter((proposta) => proposta.nameGestor.includes(gestorFilter));
-		setPropostas(propostasFiltered);
+		setPropostasView(propostas);
+		const propostasFiltered = propostas.filter((proposta) => proposta.nome_gestor.includes(gestorFilter));
+		setPropostasView(propostasFiltered);
 	}
 
 	return (
@@ -142,17 +155,18 @@ const ProposedLegislation = (props) => {
 					<ContainerInputs>
 						<b>Filtrar propostas por gestor</b>
 						<Input title="" onChange={(e) => handleFilter(e.target.value)} />
-						<Button type='button' text='Todos' onClick={() => setPropostas(propostasTeste)} />
+						<Button type='button' text='Todos' onClick={() => setPropostas(propostas)} />
 					</ContainerInputs>
 					<ContainerPropostaList>
 						{
-							propostas.map((proposta, index) => (
+							propostasView.map((proposta) => (
 								<ProposedCard
-									key={index}
+									key={proposta.id}
 									source='/assets/img/home_conheca_os_gestores.png'
 									nome={proposta.titulo}
-									sobrenome={proposta.nameGestor}
-									descricao={proposta.description}
+									sobrenome={proposta.nome_gestor}
+									descricao={proposta.descricao}
+									data={proposta.data_aprovacao.split("T")[0]}
 								/>
 							))
 						}

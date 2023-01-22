@@ -34,7 +34,7 @@ const Gestores = (props) => {
 		} catch(error){
 			console.log(error);
 		}
-	} 
+	}
 
 	const getFuncoes = async () => {
 		try {

@@ -34,3 +34,15 @@ export const ContainerDenunciaList = styled.div`
 	flex-wrap: wrap;
 `;
 
+export const ContainerInputs = styled.div`
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-around;
+	margin-bottom: 2rem;
+
+	button {
+		width: 15%;
+	}
+`;
+

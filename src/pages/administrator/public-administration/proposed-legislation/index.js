@@ -13,9 +13,9 @@ import Typography from "@mui/material/Typography";
 import Button from "../../../../components/styled-components/form-button";
 import Input from "../../../../components/input";
 import DescriptionInput from "../../../../components/description-input";
-import { Form, ContainerPropostaList, PropostaCardList, BoxModal } from "./styles";
+import { Form, ContainerPropostaList, PropostaCardList, BoxModal, ContainerInputs } from "./styles";
 import { Modal } from '@mui/material';
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
 import AdminServiceDescription from '../../../../components/styled-components/admin-service-description';
 
 import {api} from '../../../../services/api';
@@ -28,6 +28,7 @@ const AdminProposedLegislation = () => {
 	const [dataAprovacao, setDataAprovacao] = useState("");
 
 	const [propostas, setPropostas] = useState([]);
+	const [propostasView, setPropostasView] = useState([]);
 	const [deleteProposta, setDeleteProposta] = useState('');
 
 	const [modalDeleteProposta, setModalDeleteProposta] = useState("");
@@ -51,6 +52,7 @@ const AdminProposedLegislation = () => {
 					propostasArray.push(p);
 			});
 			setPropostas(propostasArray);
+			setPropostasView(propostasArray);
 		} catch(error){
 			console.log(error);
 		}
@@ -77,12 +79,10 @@ const AdminProposedLegislation = () => {
 		}
 	}
 
-	const handleEditProposta = (proposta) => {
-		window.scrollTo(0, 0);
-		setNomeGestor(proposta.nameGestor);
-		setTitulo(proposta.titulo);
-		setDescricao(proposta.description);
-		setDataAprovacao(proposta.dataAprovacao);
+	const handleFilter = (gestorFilter) => {
+		setPropostasView(propostas);
+		const propostasFiltered = propostas.filter((proposta) => proposta.nome_gestor.includes(gestorFilter));
+		setPropostasView(propostasFiltered);
 	}
 
 	const handleNewProposta = async () => {
@@ -186,9 +186,14 @@ const AdminProposedLegislation = () => {
 						<Button text="Enviar" onClick = {handleNewProposta}/>
 					</Form>
 					<AdminServiceDescription description="Aqui está a lista de todos os gestores cadastrados até o momento." />
+					<ContainerInputs>
+						<b>Filtrar propostas por gestor</b>
+						<Input title="" onChange={(e) => handleFilter(e.target.value)} />
+						<Button type='button' text='Todos' onClick={() => setPropostasView(propostas)} />
+					</ContainerInputs>
 					<ContainerPropostaList>
 						{
-							propostas.map((proposta) => (
+							propostasView.map((proposta) => (
 								<PropostaCardList key={proposta.numero}>
 									<span><b>Titulo: </b>{proposta.titulo}</span>
 									<p><b>Nome do gestor: </b>{proposta.nome_gestor}</p>

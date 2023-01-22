@@ -9,14 +9,17 @@ import {
 import AdminHeader from "../../../../components/header/admin";
 import Footer from "../../../../components/footer";
 import Typography from "@mui/material/Typography";
-import { ContainerDenunciaList, DenunciaCardList } from './styles';
+import { ContainerDenunciaList, DenunciaCardList, ContainerInputs } from './styles';
 
 import {api} from '../../../../services/api';
 import { useEffect } from "react";
 import { useState } from "react";
+import Input from "../../../../components/input";
+import  Button  from "../../../../components/styled-components/form-button";
 
 const AdminAntiCorruptionCenter = () => {
 	const [denuncias, setDenuncias] = useState([]);
+	const [denunciasView, setDenunciasView] = useState([]);
 
 	const getDenuncias = async () => {
 		try{
@@ -30,11 +33,12 @@ const AdminAntiCorruptionCenter = () => {
 			const responseDenuncia = await api.get('/denuncia');
 			const dataDenuncia = responseDenuncia.data;
 			let denunciaArray = [];
-			dataDenuncia.map(d => {
+			dataDenuncia.forEach(d => {
 					const p = {nome_gestor: gestoresMap[d.numero_gestor], ...d};
 					denunciaArray.push(p);
 			});
 			setDenuncias(denunciaArray);	
+			setDenunciasView(denunciaArray);
 		}
 		catch(error){
 			console.log(error);
@@ -42,6 +46,12 @@ const AdminAntiCorruptionCenter = () => {
 	}
 
 	useEffect(() => {getDenuncias();}, []);
+
+	const handleFilter = (gestorFilter) => {
+		setDenunciasView(denuncias);
+		const denunciasFiltered = denuncias.filter((denuncia) => denuncia.nome_gestor.includes(gestorFilter));
+		setDenunciasView(denunciasFiltered);
+	}
 
 	return (
 		<ContainerBase>
@@ -81,9 +91,14 @@ const AdminAntiCorruptionCenter = () => {
 						</DescriptionText>
 					</div>
 					<div></div>
+					<ContainerInputs>
+						<b>Filtrar denuncias por gestor</b>
+						<Input title="" onChange={(e) => handleFilter(e.target.value)} />
+						<Button type='button' text='Todos' onClick={() => setDenunciasView(denuncias)} />
+					</ContainerInputs>
 					<ContainerDenunciaList>
 						{
-							denuncias.map((denuncia, index) => (
+							denunciasView.map((denuncia, index) => (
 								<DenunciaCardList key={index}>
 									<span><b>Contra: </b>{denuncia.nome_gestor}</span>
 									<p><b>Realizada por: </b>{denuncia.cpf_cidadao}</p>

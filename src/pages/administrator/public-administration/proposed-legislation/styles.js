@@ -62,3 +62,15 @@ export const BoxModal = styled.div`
 		width: 165%;
 	}
 `;
+
+export const ContainerInputs = styled.div`
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-around;
+	margin-bottom: 2rem;
+
+	button {
+		width: 15%;
+	}
+`;

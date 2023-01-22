@@ -21,36 +21,107 @@ import GrayLine from "../../../components/styled-components/gray-line";
 
 import { Container } from "./styles.js";
 
-const gestorTeste = {
-	'cpf': '111.111.111.11',
-	'nome': 'guilherme ribeiro carrara',
-	'partido': 'UNESP',
+import { api } from '../../../services/api';
+
+const months = {
+	0: '01',
+	1: '02',
+	2: '03',
+	3: '04',
+	4: '05',
+	5: '06',
+	6: '07',
+	7: '08',
+	8: '09',
+	9: '10',
+	10: '11',
+	11: '12',
 }
+
 
 const AntiCorruptionCenter = (props) => {
 	const [isFavorite, setIsFavorite] = useState(false);
 	const [gestor, setGestor] = useState(null);
+	const [userCPF, setUserCPF] = useState("");
+	const [gestores, setGestores] = useState([]);
+	const [descricao, setDescricao] = useState("");
+	const [nomeGestor, setNomeGestor] = useState("");
 
+	const getGestores = async () => {
+		try {
+			const responsePartidos = await api.get('/partido');
+			const dataPartidos = responsePartidos.data;
+			let partidosMap = {};
+			dataPartidos.forEach(d => {
+				partidosMap[d.id] = `${d.nome} - ${d.sigla}`;
+			});
+
+			const responseGestores = await api.get('/gestor');
+			const dataGestores = responseGestores.data;
+			let GestoresArray = [];
+			dataGestores.map(d => {
+					const p = {nome_partido: partidosMap[d.id_partido], ...d};
+					GestoresArray.push(p);
+			});
+			setGestores(GestoresArray);	
+
+		} catch(error){
+			console.log(error);
+		}
+	}
 
 	useEffect(() => {
+		getGestores();
+
 		props.data.find(
 			(favoriteX) => favoriteX.id === 45 && setIsFavorite(true)
 		);
 	}, []);
 
 	const handleGestor = (nome) => {
-		//buscar gestor no banco pelo nome
-		if (nome === gestorTeste.nome) {
-			setGestor(gestorTeste);
+		setNomeGestor(nome);
+		const gestoresFiltered = gestores.filter(g => g.nome_completo === nome);
+		if (gestoresFiltered.length > 0) {
+			setGestor(gestoresFiltered[0]);
 		}
 		else {
 			setGestor(null);
 		}
 	}
 
-	const handleDenuncia = () => {
-		//registrar denuncia no banco 
-		alert("Denúncia efetuada com sucesso!");
+	const handleDenuncia = async () => {
+
+		if(!gestor || userCPF.trim() === '' || descricao.trim() === ''){
+			alert("Preencha todos os dados!");
+		}
+		else {
+			const responseCidadao = await api.get('/cidadao');
+			const dataCidadao = responseCidadao.data;
+			let validCidadao = false;
+
+			dataCidadao.forEach(c => {if(c.cpf === userCPF) validCidadao = true; return;});
+
+			if(validCidadao) {
+
+				const date = new Date();
+				const response = await api.post('/denuncia', {
+					data_denuncia: `${date.getFullYear()}-${months[date.getMonth()]}-${date.getDate()}`, 
+					texto_denuncia: descricao,
+					cpf_cidadao: userCPF,
+					numero_gestor: gestor.numero
+				});
+				if(response.status === 201)
+					alert("Denúncia efetuada com sucesso!");
+					setDescricao("");
+					setGestor(null);
+					setUserCPF("");
+					setNomeGestor("");
+			}
+			else{
+				alert("CPF inválido!");
+				return;
+			}
+		}
 	}
 
 	const handleFavorite = () => {
@@ -146,8 +217,20 @@ const AntiCorruptionCenter = (props) => {
 							<TextField
 								fullWidth
 								id="outlined-basic"
+								label="Seu CPF"
+								variant="outlined"
+								value = {userCPF}
+								onChange={(e) => setUserCPF(e.target.value)}
+							/>
+						</Stack>
+						<br />
+						<Stack spacing={2} direction="row">
+							<TextField
+								fullWidth
+								id="outlined-basic"
 								label="Nome do gestor"
 								variant="outlined"
+								value={nomeGestor}
 								onChange={(e) => handleGestor(e.target.value)}
 							/>
 						</Stack>
@@ -160,7 +243,7 @@ const AntiCorruptionCenter = (props) => {
 										id="outlined-basic"
 										helperText="Nome do gestor"
 										variant="outlined"
-										value={gestorTeste.nome}
+										value={gestor.nome_completo}
 										disabled
 									/>
 								</Stack>
@@ -171,7 +254,7 @@ const AntiCorruptionCenter = (props) => {
 										id="outlined-basic"
 										helperText="Partido do gestor"
 										variant="outlined"
-										value={gestorTeste.partido}
+										value={gestor.nome_partido}
 										disabled
 									/>
 								</Stack>
@@ -187,9 +270,9 @@ const AntiCorruptionCenter = (props) => {
 									variant="outlined"
 									multiline
 									rows={5}
-									value={''}
+									value={descricao}
 									helperText={''}
-									onChange={() => { }}
+									onChange={(e) => { setDescricao(e.target.value)}}
 								/>
 							</Stack>
 						</div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MiniCard from "../../../../components/mini-card";
 import {
 	ContainerBase,
@@ -11,7 +11,6 @@ import AdminHeader from "../../../../components/header/admin";
 import Footer from "../../../../components/footer";
 import Typography from "@mui/material/Typography";
 import Button from "../../../../components/styled-components/form-button";
-import InputPhotos from "../../../../components/images-input";
 import Input from "../../../../components/input";
 import DescriptionInput from "../../../../components/description-input";
 import { Form, ContainerPropostaList, PropostaCardList, BoxModal } from "./styles";
@@ -19,37 +18,96 @@ import { Modal } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 import AdminServiceDescription from '../../../../components/styled-components/admin-service-description';
 
+import {api} from '../../../../services/api';
 
-const propostas = [
-	{
-		nameGestor: 'nome do gestor',
-		titulo: 'titulo da proposta',
-		description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-		dataAprovacao: '2023-01-01'
-	},
-	{
-		nameGestor: 'nome do gestor',
-		titulo: 'titulo da proposta',
-		description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-		dataAprovacao: '2023-01-01'
-	}
-];
 
 const AdminProposedLegislation = () => {
-	const [nameGestor, setNameGestor] = useState("");
+	const [nomeGestor, setNomeGestor] = useState("");
 	const [titulo, setTitulo] = useState("");
-	const [description, setDescription] = useState("");
+	const [descricao, setDescricao] = useState("");
 	const [dataAprovacao, setDataAprovacao] = useState("");
+
+	const [propostas, setPropostas] = useState([]);
+	const [deleteProposta, setDeleteProposta] = useState('');
 
 	const [modalDeleteProposta, setModalDeleteProposta] = useState("");
 
+	const getPropostas = async () => {
+		let propostasArray = [];
+
+		try {
+
+			const responseGestores = await api.get('/gestor');
+			const dataGestores = responseGestores.data;
+			let gestoresMap = {};
+			dataGestores.forEach(d => {
+				gestoresMap[d.numero] = d.nome_completo;
+			});
+
+			const responsePropostas = await api.get('/propostas');
+			const dataPropostas = responsePropostas.data;
+			dataPropostas.forEach(d => {
+					const p = {nome_gestor: gestoresMap[d.numero_gestor], ...d};
+					propostasArray.push(p);
+			});
+			setPropostas(propostasArray);
+		} catch(error){
+			console.log(error);
+		}
+	}
+
+	useEffect(() => {getPropostas();}, []);
+
+	const handleDeleteProposta = async () => {
+		try{
+			const response = await api.delete(`/propostas/${deleteProposta}`);
+
+			if(response.status === 200) {
+				alert("Proposta deletada com sucesso!");
+				window.location.reload();
+			}
+			else 
+				alert("Erro ao deletar proposta!");
+		}
+		catch(error){
+			console.log(error);
+		}
+		finally {
+			setModalDeleteProposta(false);
+		}
+	}
 
 	const handleEditProposta = (proposta) => {
 		window.scrollTo(0, 0);
-		setNameGestor(proposta.nameGestor);
+		setNomeGestor(proposta.nameGestor);
 		setTitulo(proposta.titulo);
-		setDescription(proposta.description);
+		setDescricao(proposta.description);
 		setDataAprovacao(proposta.dataAprovacao);
+	}
+
+	const handleNewProposta = async () => {
+		try{
+			const responseGestores = await api.get('/gestor');
+			const dataGestores = responseGestores.data;
+			const gestor = dataGestores.filter(g => g.nome_completo === nomeGestor);
+
+			const response = await api.post(`/propostas`, {
+				titulo: titulo, 
+				descricao: descricao, 
+				data_aprovacao: dataAprovacao.split("T")[0],
+				numero_gestor: gestor[0].numero
+			});
+
+			if(response.status === 201) {
+				alert("Proposta cadastrada com sucesso!");
+				window.location.reload();
+			}
+			else 
+				alert("Erro ao cadastrar proposta!");
+		}
+		catch(error){
+			console.log(error);
+		}
 	}
 
 	return (
@@ -97,15 +155,15 @@ const AdminProposedLegislation = () => {
 						onClose={() => setModalDeleteProposta(false)}
 					>
 						<BoxModal>
-							<b>Tem certeza que gostaria de deletar essa proposta?</b><br />
-							<Button text='Deletar' onClick />
+							<b>Tem certeza que gostaria de deletar essa proposta ?</b><br />
+							<Button text='Deletar' onClick={handleDeleteProposta} />
 							<Button text='Cancelar' onClick={() => setModalDeleteProposta(false)} />
 						</BoxModal>
 					</Modal>
 					<Form>
 						<Input
-							value={nameGestor}
-							onChange={(e) => setNameGestor(e.target.value)}
+							value={nomeGestor}
+							onChange={(e) => setNomeGestor(e.target.value)}
 							title="Nome do Gestor Responsável:"
 						/>
 						<Input
@@ -120,25 +178,28 @@ const AdminProposedLegislation = () => {
 							title="Data de Aprovação:"
 						/>
 						<DescriptionInput
-							value={description}
+							value={descricao}
 							title="Descrição:"
 							placeholder="Nos conte em detalhes sobre essa proposta de lei."
-							onChange={(e) => setDescription(e.target.value)}
+							onChange={(e) => setDescricao(e.target.value)}
 						/>
-						<Button text="Enviar" onClick />
+						<Button text="Enviar" onClick = {handleNewProposta}/>
 					</Form>
 					<AdminServiceDescription description="Aqui está a lista de todos os gestores cadastrados até o momento." />
 					<ContainerPropostaList>
 						{
-							propostas.map((proposta, index) => (
-								<PropostaCardList key={index}>
+							propostas.map((proposta) => (
+								<PropostaCardList key={proposta.numero}>
 									<span><b>Titulo: </b>{proposta.titulo}</span>
-									<p><b>Nome do gestor: </b>{proposta.nameGestor}</p>
-									<p><b>descricao: </b>{proposta.description}</p>
-									<p><b>Data de Aprovação:</b> {proposta.dataAprovacao}</p>
+									<p><b>Nome do gestor: </b>{proposta.nome_gestor}</p>
+									<p><b>descricao: </b>{proposta.descricao}</p>
+									<p><b>Data de Aprovação:</b> {proposta.data_aprovacao.split("T")[0]}</p>
 									<div>
-										<Button text={<Delete />} onClick={() => setModalDeleteProposta(true)} />
-										<Button text={<Edit />} onClick={() => handleEditProposta(proposta)} />
+										<Button text={<Delete />} onClick={() => {
+											console.log(proposta.numero)
+											setDeleteProposta(+proposta.numero); 
+											setModalDeleteProposta(true);
+											}} />
 									</div>
 								</PropostaCardList>
 							))

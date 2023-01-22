@@ -237,8 +237,8 @@ const AdminGestores = () => {
 		window.scrollTo(0, 0);
 		setNumeroGestor(gestor.numero);
 		setNome(gestor.nome_completo);
-		setFuncao(gestor.id_funcao);
-		setPartido(gestor.id_partido);
+		setFuncao(gestor.id_funcao ? gestor.id_funcao : 1);
+		setPartido(gestor.id_partido ? gestor.id_partido : 1);
 		setDataNascimento(gestor.data_nascimento.split("T")[0]);
 		setDataPosse(gestor.data_posse.split("T")[0]);
 		setEditGestor(true);
@@ -367,7 +367,7 @@ const AdminGestores = () => {
 						/>
 						<label>Cargo: </label>
 						<ContainerInputs>
-							<select name="funcaoList" defaultValue={1} onChange={(e)=>setFuncao(e.target.value)}>
+							<select name="funcaoList" value={funcao} defaultValue={1} onChange={(e)=>setFuncao(e.target.value)}>
 								{Object.keys(funcoes).map((f) => {
 									return <option value={f}>{funcoes[f].titulo} - {funcoes[f].mandato} anos</option>
 								})}
@@ -377,7 +377,7 @@ const AdminGestores = () => {
 						</ContainerInputs>
 						<label>Partido: </label>
 						<ContainerInputs>
-							<select name="partidoList" defaultValue={1} onChange={(e)=>setPartido(e.target.value)}> 
+							<select name="partidoList" value={partido} defaultValue={1} onChange={(e)=>setPartido(e.target.value)}> 
 							{Object.keys(partidos).map((p) => {
 									return <option value={p}>{partidos[p]} </option>
 								})}
@@ -408,8 +408,8 @@ const AdminGestores = () => {
 								<GestorListCard key={gestor.numero} style={{background: gestor.ativo === 1 ? 'white' : '#ffc8c4'}}>
 									<img src='/assets/img/profilepic.png' alt={gestor.nome_completo}/>
 									<span><b>Nome Completo: </b>{gestor.nome_completo}</span>
-									<p><b>Cargo: </b>{funcoes[gestor.id_funcao].titulo}</p>
-									<p><b>Partido: </b>{partidos[gestor.id_partido]}</p>
+									<p><b>Cargo: </b>{gestor.id_funcao ? funcoes[gestor.id_funcao].titulo: "Cargo deletado"}</p>
+									<p><b>Partido: </b>{gestor.id_partido ? partidos[gestor.id_partido] : "Partido Deletado"}</p>
 									<p><b>Data de Posse:</b> {gestor.data_posse.split("T")[0]}</p>
 									<p><b>Data de Nascimento: </b>{gestor.data_nascimento.split("T")[0]}</p>
 									<div>
